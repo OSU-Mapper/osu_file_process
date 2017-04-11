@@ -1,0 +1,169 @@
+
+General - Various properties about the beatmap's gameplay.
+Editor - Saved settings for mappers while editing beatmaps.
+Metadata - Descriptive information about the song and beatmap.
+Difficulty - Values defining the difficulty of the beatmap.
+Events - A list of storyboard events.
+Timing Points - A list of the beatmap's timing points and hitsounds.
+Colours - RGB values of the combo colours used.
+Hit Objects - A list of the beatmap's hit objects.
+
+[General]
+AudioFilename (String) specifies the location of the audio file relative to the current folder.
+AudioLeadIn (Integer, milliseconds) is the amount of time added before the audio file begins playing. Useful for audio files that begin immediately.
+PreviewTime (Integer, milliseconds) defines when the audio file should begin playing when selected in the song selection menu.
+Countdown (Boolean) specifies whether or not a countdown occurs before the first hit object appears.
+SampleSet (String) specifies which set of hit sounds will be used throughout the beatmap.
+StackLeniency (Float) is how often closely placed hit objects will be stacked together.
+Mode (Integer) defines the game mode of the beatmap. (0=osu!, 1=Taiko, 2=Catch the Beat, 3=osu!mania)
+LetterboxInBreaks (Boolean) specifies whether the letterbox appears during breaks.
+WidescreenStoryboard (Boolean) specifies whether or not the storyboard should be widescreen.
+
+[Editor]
+Bookmarks (Integer List, milliseconds) is a list of comma-separated times of editor bookmarks.
+DistanceSpacing (Float) is a multiplier for the "Distance Snap" feature.
+BeatDivisor (Integer) specifies the beat division for placing objects.
+GridSize (Integer) specifies the size of the grid for the "Grid Snap" feature.
+TimelineZoom (Float) specifies the zoom in the editor timeline.
+
+[Metadata]
+Title (String) is the title of the song limited to ASCII characters.
+TitleUnicode (String) is the title of the song with unicode support. If not present, Title is used.
+Artist (String) is the name of the song's artist limited to ASCII characters.
+ArtistUnicode (String) is the name of the song's artist with unicode support. If not present, Artist is used.
+Creator (String) is the username of the mapper.
+Version (String) is the name of the beatmap's difficulty.
+Source (String) describes the origin of the song.
+Tags (String List) is a collection of words describing the song. Tags are searchable in both the online listings and in the song selection menu.
+BeatmapID (Integer) is the ID of the single beatmap.
+BeatmapSetID (Integer) is the ID of the beatmap set.
+
+[Difficulty]
+HPDrainRate (Float) specifies the HP Drain difficulty.
+CircleSize (Float) specifies the size of hit object circles.
+OverallDifficulty (Float) specifies the amount of time allowed to click a hit object on time.
+ApproachRate (Float) specifies the amount of time taken for the approach circle and hit object to appear.
+SliderMultiplier (Float) specifies a multiplier for the slider velocity. Default value is 1.4 .
+SliderTickRate (Float) specifies how often slider ticks appear. Default value is 1.
+
+[Events]
+----------------------------------------------------------------=----------------------------------------------------------------=------------------------------------
+general structure:
+//Background and Video events
+//Storyboard Layer
+(Sprites and Animations) Sprite,"layer","origin","filepath",x,y  |   Animation,"layer","origin","filepath",x,y,frameCount,frameDelay,looptype
+event type, easing, starttime, endtime, [params]
+event type, easing, starttime, endtime, [params]
+....
+(sound effects) Sample,time,layer,"filepath",volume 
+
+-----------------------------------------------------------------
+event type, easing, starttime, endtime, [params]    -- e.g. S,0,0,3740,1.5,1.9
+
+event type:
+F - fade
+M - move
+S - scale
+V - vector scale (width and height separately)
+R - rotate
+C - colour
+L - loop
+T - Event-triggered loop
+P - Parameters
+
+easing:
+0 - none (constant speed)
+1 - start fast and slow down
+2 - start slow and speed up
+
+starttime, endtime: the times in milliseconds between which the event will be animated, 0 represents 00:00:00, 2288 represents 00:22:88
+
+params is different according to the event type:
+1.F,[...],startopacity,endopacity 
+startopacity: the opacity at the beginning of the animation
+endopacity: the opacity at the end of the animation
+0 - invisible, 1 - fully visible
+
+2.M,[...],startx,starty,endx,endy
+startx, starty: the position at the beginning of the animation
+endx, endy: the position at the end of the animation
+Note: the size of the play field is (640,480), with (0,0) being top left corner.
+
+3.S,[...],startscale,endscale
+startscale: the scale factor at the beginning of the animation
+endscale: the scale factor at the end of the animation
+1 = 100%, 2 = 200% etc. decimals are allowed.
+
+4.V,[...],startx,starty,endx,endy
+startx, starty: the scale factor at the beginning of the animation
+endx, endy: the scale factor at the end of the animation
+1 = 100%, 2 = 200% etc. decimals are allowed.
+
+5.R,[...],startangle,endangle
+startangle: the angle to rotate by in radians at the beginning of the animation
+endangle: the angle to rotate by in radians at the end of the animation
+positive angle is clockwise rotation
+
+6.C,[...],r1,g1,b1,r2,g2,b2
+r1, g1, b1: the starting component-wise colour
+r2, g2, b2: the finishing component-wise colour
+sprites with (255,255,255) will be their original colour. sprites with (0,0,0) will be totally black. anywhere in between will result in subtractive colouring. to make full use of this, brighter greyscale sprites work very well.
+
+7.MX,[...],startx,endx
+startx: the x position at the beginning of the animation
+endx: the x position at the end of the animation
+
+8.MY,[...],starty,endy
+starty: the y position at the beginning of the animation
+endy: the y position at the end of the animation
+
+9.P,[...],p
+p: the effect parameter to apply
+H - horizontal flip
+V - vertical flip
+A - additive-blend colour (as opposed to alpha-blend)
+------------------------------------------------------------------
+layer: 
+e.g.
+//Storyboard Layer 0 (Background)
+//Storyboard Layer 1 (Fail -- only displayed if the player is in the "Fail state")
+//Storyboard Layer 2 (Pass -- only displayed if the player is in the "Pass state")
+//Storyboard Layer 3 (Foreground)
+------------------------------------------------------------------
+Sprite,"layer","origin","filepath",x,y -- e.g. 4,0,1,"bg.jpg",320,264
+
+x, y: the position of the image
+Note: (0,0) is the top left corner while (640,480) is the bottom right corner.
+-------------------------------------------------------------------
+(sound effects) Sample,time,layer,"filepath",volume  -- e.g. 5,5844,0,"dake\Part 1 - Hit Circle.mp3"
+
+time: the time in milliseconds to start playing the sound effect
+volume: volume of the sound file. (1-100) Can be left off for 100.
+-----------------------------------------------------------------------------------------------------------------------------------=----------------------------------
+
+[TimingPoints]
+Offset, Milliseconds per Beat, Meter, Sample Type, Sample Set, Volume, Inherited, Kiai Mode
+
+Offset (Integer, milliseconds) defines when the Timing Point takes effect. 
+Milliseconds per Beat (Float) defines the beats per minute of the song
+Meter (Integer) defines the number of beats in a measure
+Sample Type (Integer) defines the type of hit sound samples that are used.
+Sample Set (Integer) defines the set of hit sounds that are used.
+Volume (Integer) is a value from 0 - 100 that defines the volume of hit sounds.
+Inherited (Boolean) defines whether or not the Timing Point is an inherited Timing Point.
+Kiai Mode (Boolean) defines whether or not Kiai Time effects are active.
+
+[Colours]
+Combo# (Integer List) is a list of three numbers, each from 0 - 255 defining an RGB color.
+
+[Hit Objects]
+Hit Circle Syntax: x,y,time,type,hitSound,addition
+Slider Syntax: x,y,time,type,hitSound,sliderType|curveX:curveY|...|repeat,pixelLength|edgeHitsound:edgeAddition,addition
+Spinner Syntax: x,y,time,type,hitSound,endTime,addition
+
+explanation: 
+x ranges from 0 to 512 (inclusive) and y ranges from 0 to 384 (inclusive).
+time is in milliseconds from the beginning of the song.
+NOTE: 'addition' is optional, and defaults to "0:0:0:0:".
+Hit object type is a bitmap:
+circle = 1 slider = 2 new combo = 4 spinner = 8
