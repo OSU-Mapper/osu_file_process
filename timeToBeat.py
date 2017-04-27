@@ -1,21 +1,22 @@
 import sys
 import argparse
-
-def search(input):
+import numpy as np
+import csv
+def search(input, file):
     hitobject = []
-    with open(sys.argv[1], 'r') as my_file:
-        lines = my_file.readlines()
-        line_iter = iter(lines)
+    with open(file, 'r') as my_file:
+        # lines = my_file.readlines()
+        # line_iter = iter(lines)
+        csvreader = csv.reader(my_file)
         find = False
         target = "[" + input + "]"
-        for line in line_iter:
+        for line in csvreader:
             if target in line:
                 find = True
                 break
         if (find):
-            for line in line_iter:
-                if len(line.strip()) != 0:
-                    tmp = line.split(",")
+            for tmp in csvreader:
+                if len(tmp) != 0:
                     if len(tmp) == 5:
                         tmp = list(map(int, tmp))
                         for i in range(4):
@@ -41,11 +42,9 @@ def search(input):
 def getbeat(input):
     beats = []
     with open(input, 'r') as my_file:
-        lines = my_file.readlines()
-        line_iter = iter(lines)
-        for line in line_iter:
-            line = line.split(",")
-            line = list(map(int, line))
+        csvreader = csv.reader(my_file)
+        for line in csvreader:
+            line = list(map(float, line))
             beats.append(line)
     return beats
 
@@ -62,20 +61,28 @@ def closestindex(x, y):
 def merge(x, y):
     for i in range(len(x)):
         index = closestindex(x[i][2], y)
-        x[i][2] = y[index][1]
-        y[index] = [y[index][0]] + x[i]
+        # print (x[i][2])
+        # print (y)
+        # print (index)
+        x[i][2] = int(y[index][1])
+        y[index] = [int(y[index][0])] + x[i] + [y[index][2]]
     for i in range(len(y)):
-        if len(y[i]) == 2:
-            y[i] = [y[i][0],0,0,y[i][1],0,0,0,0,0,0]
+        if len(y[i]) == 3:
+            y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
     return y
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        # print( "usage: inputfile outputfile")
+        print( "usage: inputfile outputfile")
         raise argparse.ArgumentTypeError('the number of argument has to be 3')
         exit(-1)
-    hitobject = search("HitObjects")
-    print (hitobject)
-    beats = getbeat(sys.argv[2])
-    print(beats)
+    filePath = sys.argv[1]
+    csvPath  = sys.argv[2]
+    hitobject = search("HitObjects", filePath)
+    # print (hitobject)
+    beats = getbeat(csvPath)
+    # print(beats)
     result = merge(hitobject, beats)
-    print(result)
+    # print(result)
+    with open("labeledFeature.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(result)
