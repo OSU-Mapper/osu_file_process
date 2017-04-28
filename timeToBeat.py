@@ -53,17 +53,18 @@ def closestindex(x, y):
         if y[i][1] == x:
             return i
         elif y[i][1] > x:
-            if abs(y[i][1] - x) <= abs(y[i-1][1] - x):
+            if i == 0:
+                return i
+            elif abs(y[i][1] - x) <= abs(y[i-1][1] - x):
                 return i
             else:
                 return i - 1
+    if i == len(y) - 1:
+        return i
 
 def merge(x, y):
     for i in range(len(x)):
         index = closestindex(x[i][2], y)
-        # print (x[i][2])
-        # print (y)
-        # print (index)
         x[i][2] = int(y[index][1])
         y[index] = [int(y[index][0])] + x[i] + [y[index][2]]
     for i in range(len(y)):
