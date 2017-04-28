@@ -21,7 +21,7 @@ def createosu(x,y):
     for i in range(len(y)):
         print("{time},{bpm},{extra}".format(
             time = str(int(1000*float(y[i][0]))),
-            bpm  = str(y[i][1]),
+            bpm  = int(60000/y[i][1]),
             extra="4,2,1,60,1,0"
         ))
     print("\n[HitObjects]")
