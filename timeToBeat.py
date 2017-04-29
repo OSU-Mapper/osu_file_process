@@ -65,28 +65,26 @@ def closestindex(x, y):
 #y: feature
 #x: hit objects
 def merge(x, y):
-    print (len(x))
-    print (len(y))
-    # usedindex = []
-    # z = x
-    # for i in range(len(y)):
+    usedindex = []
+    z = x
+    for i in range(len(y)):
         # print (x[i][2])
         # print (y)
-        # index = closestindex(y[i][1], x)
-        # if index not in usedindex:
-        #     usedindex.append(index)
+        index = closestindex(y[i][1], x)
+        if index not in usedindex:
+            usedindex.append(index)
         # print (index)
-            # tmp = x[index]
-            # tmp[2] = y[i][1]
-            # z[index] = [int(y[i][0])] + tmp + [y[i][2]]
+            tmp = x[index]
+            tmp[2] = y[i][1]
+            z[index] = [int(y[i][0])] + tmp + [y[i][2]]
         # print (x[i][2])
         # print (x[i])
         # print (y[index][1])
         # print (y[index])
-    # for i in range(len(z)):
-    #     if i not in usedindex:
-    #         z[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-    # return z
+    for i in range(len(z)):
+        if i not in usedindex:
+            y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+    return z
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print( "usage: inputfile outputfile")
@@ -98,9 +96,9 @@ if __name__ == "__main__":
     # print (hitobject)
     beats = getbeat(csvPath)
     # print(beats)
-    merge(hitobject, beats)
+    result = merge(hitobject, beats)
     # print(result)
-    # with open("labeledFeature.csv", "w") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerows(result)
+    with open("labeledFeature.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(result)
     
