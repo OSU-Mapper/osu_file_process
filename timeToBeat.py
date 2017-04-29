@@ -5,8 +5,6 @@ import csv
 def search(input, file):
     hitobject = []
     with open(file, 'r') as my_file:
-        # lines = my_file.readlines()
-        # line_iter = iter(lines)
         csvreader = csv.reader(my_file)
         find = False
         target = "[" + input + "]"
@@ -62,30 +60,6 @@ def closestindex(x, y):
     if i == len(y) - 1:
         return i
 
-#y: feature
-#x: hit objects
-# def merge(x, y):
-#     usedindex = []
-#     z = x
-#     for i in range(len(y)):
-#         # print (x[i][2])
-#         # print (y)
-#         index = closestindex(y[i][1], x)
-#         if index not in usedindex:
-#             usedindex.append(index)
-#         # print (index)
-#             tmp = x[index]
-#             tmp[2] = y[i][1]
-#             z[index] = [int(y[i][0])] + tmp + [y[i][2]]
-#         # print (x[i][2])
-#         # print (x[i])
-#         # print (y[index][1])
-#         # print (y[index])
-#     for i in range(len(z)):
-#         if i not in usedindex:
-#             y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-#     return z
-
 
 def merge(x, y):
     feature_copy = y
@@ -100,20 +74,6 @@ def merge(x, y):
         if len(feature_copy[i]) == 3:
             feature_copy[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
     return feature_copy
-    #         usedindex.append(index)
-    #     # print (index)
-    #         tmp = x[index]
-    #         tmp[2] = y[i][1]
-    #         feature_copy[i] = [int(y[i][0])] + tmp + [y[i][2]]
-    #     # print (x[i][2])
-    #     # print (x[i])
-    #     # print (y[index][1])
-    #     # print (y[index])
-    # for i in range(len(z)):
-    #     if i not in usedindex:
-    #         y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-    # return y
-    # return z
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -123,11 +83,8 @@ if __name__ == "__main__":
     filePath = sys.argv[1]
     csvPath  = sys.argv[2]
     hitobject = search("HitObjects", filePath)
-    # print (hitobject)
     beats = getbeat(csvPath)
-    # print(beats)
     result = merge(hitobject, beats)
-    # print(result)
     with open("labeledFeature.csv", "w") as file:
         writer = csv.writer(file)
         writer.writerows(result)

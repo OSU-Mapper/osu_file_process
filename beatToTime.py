@@ -7,7 +7,6 @@ def gettime(input):
     length = 11
     for i in range(len(input)):
         part = [input[i][j] for j in zeros]
-        #print (part)
         if (not all(x == '0' for x in part)):
             tmp = input[i]
             addition = tmp[6]+":"+tmp[7]+":"+tmp[8]+":"+tmp[9]
