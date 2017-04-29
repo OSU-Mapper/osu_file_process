@@ -62,13 +62,15 @@ def closestindex(x, y):
 
 
 def merge(x, y):
+    print (len(x))
+    print (len(y))
     feature_copy = y
     for i in range(len(x)):
         index = closestindex(x[i][2], y)
-        print (index)
         if len(feature_copy[index]) == 3:
             tmp = x[i]
             tmp[2] = int(y[index][1])
+            tmp[3] = 1
             feature_copy[index] = [int(y[index][0])] + tmp + [y[index][2]]
     for i in range(len(feature_copy)):
         if len(feature_copy[i]) == 3:
