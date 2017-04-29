@@ -50,9 +50,9 @@ def getbeat(input):
 
 def closestindex(x, y):
     for i in range(len(y)):
-        if y[i][1] == x:
+        if y[i][2] == x:
             return i
-        elif y[i][1] > x:
+        elif y[i][2] > x:
             if i == 0:
                 return i
             elif abs(y[i][1] - x) <= abs(y[i-1][1] - x):
@@ -62,15 +62,31 @@ def closestindex(x, y):
     if i == len(y) - 1:
         return i
 
+#y: feature
+#x: hit objects
 def merge(x, y):
-    for i in range(len(x)):
-        index = closestindex(x[i][2], y)
-        x[i][2] = int(y[index][1])
-        y[index] = [int(y[index][0])] + x[i] + [y[index][2]]
-    for i in range(len(y)):
-        if len(y[i]) == 3:
-            y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-    return y
+    print (len(x))
+    print (len(y))
+    # usedindex = []
+    # z = x
+    # for i in range(len(y)):
+        # print (x[i][2])
+        # print (y)
+        # index = closestindex(y[i][1], x)
+        # if index not in usedindex:
+        #     usedindex.append(index)
+        # print (index)
+            # tmp = x[index]
+            # tmp[2] = y[i][1]
+            # z[index] = [int(y[i][0])] + tmp + [y[i][2]]
+        # print (x[i][2])
+        # print (x[i])
+        # print (y[index][1])
+        # print (y[index])
+    # for i in range(len(z)):
+    #     if i not in usedindex:
+    #         z[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+    # return z
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print( "usage: inputfile outputfile")
@@ -82,9 +98,9 @@ if __name__ == "__main__":
     # print (hitobject)
     beats = getbeat(csvPath)
     # print(beats)
-    result = merge(hitobject, beats)
+    merge(hitobject, beats)
     # print(result)
-    with open("labeledFeature.csv", "w") as file:
-        writer = csv.writer(file)
-        writer.writerows(result)
+    # with open("labeledFeature.csv", "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerows(result)
     
