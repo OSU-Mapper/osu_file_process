@@ -50,9 +50,9 @@ def getbeat(input):
 
 def closestindex(x, y):
     for i in range(len(y)):
-        if y[i][2] == x:
+        if y[i][1] == x:
             return i
-        elif y[i][2] > x:
+        elif y[i][1] > x:
             if i == 0:
                 return i
             elif abs(y[i][1] - x) <= abs(y[i-1][1] - x):
@@ -64,27 +64,57 @@ def closestindex(x, y):
 
 #y: feature
 #x: hit objects
+# def merge(x, y):
+#     usedindex = []
+#     z = x
+#     for i in range(len(y)):
+#         # print (x[i][2])
+#         # print (y)
+#         index = closestindex(y[i][1], x)
+#         if index not in usedindex:
+#             usedindex.append(index)
+#         # print (index)
+#             tmp = x[index]
+#             tmp[2] = y[i][1]
+#             z[index] = [int(y[i][0])] + tmp + [y[i][2]]
+#         # print (x[i][2])
+#         # print (x[i])
+#         # print (y[index][1])
+#         # print (y[index])
+#     for i in range(len(z)):
+#         if i not in usedindex:
+#             y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+#     return z
+
+
 def merge(x, y):
-    usedindex = []
-    z = x
-    for i in range(len(y)):
-        # print (x[i][2])
-        # print (y)
-        index = closestindex(y[i][1], x)
-        if index not in usedindex:
-            usedindex.append(index)
-        # print (index)
-            tmp = x[index]
-            tmp[2] = y[i][1]
-            z[index] = [int(y[i][0])] + tmp + [y[i][2]]
-        # print (x[i][2])
-        # print (x[i])
-        # print (y[index][1])
-        # print (y[index])
-    for i in range(len(z)):
-        if i not in usedindex:
-            y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-    return z
+    feature_copy = y
+    for i in range(len(x)):
+        index = closestindex(x[i][2], y)
+        print (index)
+        if len(feature_copy[index]) == 3:
+            tmp = x[i]
+            tmp[2] = int(y[index][1])
+            feature_copy[index] = [int(y[index][0])] + tmp + [y[index][2]]
+    for i in range(len(feature_copy)):
+        if len(feature_copy[i]) == 3:
+            feature_copy[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+    return feature_copy
+    #         usedindex.append(index)
+    #     # print (index)
+    #         tmp = x[index]
+    #         tmp[2] = y[i][1]
+    #         feature_copy[i] = [int(y[i][0])] + tmp + [y[i][2]]
+    #     # print (x[i][2])
+    #     # print (x[i])
+    #     # print (y[index][1])
+    #     # print (y[index])
+    # for i in range(len(z)):
+    #     if i not in usedindex:
+    #         y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+    # return y
+    # return z
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print( "usage: inputfile outputfile")
